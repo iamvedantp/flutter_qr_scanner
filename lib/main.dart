@@ -103,7 +103,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                   setState(() {
                     result = scandata.code!;
                     if (result.isNotEmpty) {
-                      // If result is not empty, close the camera and show options
+                      // If result is not empty, close the camera
                       controller.pauseCamera();
                     }
                   });
@@ -113,24 +113,75 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
           ),
           if (result.isNotEmpty)
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: result));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Copied to Clipboard'),
-                      ),
-                    );
-                  },
-                  child: const Text('Copy'),
+                const Text(
+                  'Scanned URL:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  result,
+                  style: const TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: result));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Copied to Clipboard'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                      ),
+                      child: const Text(
+                        'Copy',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    const SizedBox(width: 180),
+                    ElevatedButton(
+                      onPressed: () {
+                        final Uri url = Uri.parse(result);
+                        launchUrl(url);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                      ),
+                      child: const Text(
+                        'Open',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {
-                    final Uri url = Uri.parse(result);
-                    launchUrl(url);
+                    // Clear the result and resume the camera
+                    setState(() {
+                      result = '';
+                    });
+                    controller.resumeCamera();
                   },
-                  child: const Text('Open'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  ),
+                  child: const Text(
+                    'Scan Again',
+                    style: TextStyle(fontSize: 23),
+                  ),
                 ),
               ],
             ),
