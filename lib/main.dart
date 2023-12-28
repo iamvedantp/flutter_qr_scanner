@@ -115,17 +115,17 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Scanned URL:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   result,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Row(
@@ -142,14 +142,14 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                       },
                       style: ElevatedButton.styleFrom(
                         padding:
-                            EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                       ),
                       child: const Text(
                         'Copy',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
-                    SizedBox(width: 180),
+                    const SizedBox(width: 180),
                     ElevatedButton(
                       onPressed: () {
                         final Uri url = Uri.parse(result);
@@ -157,7 +157,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                       },
                       style: ElevatedButton.styleFrom(
                         padding:
-                            EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                       ),
                       child: const Text(
                         'Open',
@@ -166,7 +166,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {
                     // Clear the result and resume the camera
@@ -176,7 +176,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                     controller.resumeCamera();
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                   ),
                   child: const Text(
                     'Scan Again',
