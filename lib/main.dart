@@ -73,10 +73,13 @@ class QRCodeWidget extends StatefulWidget {
   State<QRCodeWidget> createState() => _QRCodeWidgetState();
 }
 
+// ... (your existing imports)
+
 class _QRCodeWidgetState extends State<QRCodeWidget> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late QRViewController controller;
   String result = '';
+  bool isFlashOn = false;
 
   @override
   void dispose() {
@@ -93,22 +96,38 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
       body: Column(
         children: [
           Expanded(
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: (controller) {
-                setState(() {
-                  this.controller = controller;
-                });
-                controller.scannedDataStream.listen((scandata) {
-                  setState(() {
-                    result = scandata.code!;
-                    if (result.isNotEmpty) {
-                      // If result is not empty, close the camera
-                      controller.pauseCamera();
-                    }
-                  });
-                });
-              },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    setState(() {
+                      this.controller = controller;
+                    });
+                    controller.scannedDataStream.listen((scandata) {
+                      setState(() {
+                        result = scandata.code!;
+                        if (result.isNotEmpty) {
+                          // If result is not empty, close the camera
+                          controller.pauseCamera();
+                        }
+                      });
+                    });
+                  },
+                ),
+                if (result.isEmpty)
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2.0,
+                      ),
+                    ),
+                    width: 200.0,
+                    height: 200.0,
+                  ),
+              ],
             ),
           ),
           if (result.isNotEmpty)
@@ -141,8 +160,8 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 13, horizontal: 20),
                       ),
                       child: const Text(
                         'Copy',
@@ -156,8 +175,8 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                         launchUrl(url);
                       },
                       style: ElevatedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 13, horizontal: 20),
                       ),
                       child: const Text(
                         'Open',
@@ -176,7 +195,8 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                     controller.resumeCamera();
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
                   ),
                   child: const Text(
                     'Scan Again',
@@ -187,6 +207,28 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             ),
         ],
       ),
+      bottomNavigationBar: result.isEmpty
+          ? BottomAppBar(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      // Toggle the flash
+                      setState(() {
+                        isFlashOn = !isFlashOn;
+                      });
+                      controller.toggleFlash();
+                    },
+                    icon: Icon(
+                      isFlashOn ? Icons.highlight : Icons.highlight_off,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
     );
   }
 }
