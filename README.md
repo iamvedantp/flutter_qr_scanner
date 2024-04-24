@@ -1,6 +1,9 @@
 # QR Code Scanner
 
 This repository contains a simple and user-friendly QR code scanner app developed with Flutter. The app allows users to scan QR codes, view the encoded data, open URLs, copy text, and toggle the flashlight for low-light scanning.
+![Screenshot_1713970983](https://github.com/iamvedantp/flutter_qr_scanner/assets/128803902/2c068e20-a838-4a0b-907f-e074d29e53c1)
+![Screenshot_1713970960](https://github.com/iamvedantp/flutter_qr_scanner/assets/128803902/7fbff51a-b306-4c1c-bf9d-86840736b340)
+![Screenshot_1713970971](https://github.com/iamvedantp/flutter_qr_scanner/assets/128803902/1211f9f7-7ed2-4e7b-b7a2-9e78c0cc96a3)
 
 ## Features
 
