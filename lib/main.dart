@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart'; // Import the QR code scanner package
+import 'package:url_launcher/url_launcher.dart'; // Import the URL launcher package
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "QR Code Scanner",
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      theme: ThemeData(
+          primarySwatch: Colors.blueGrey), // Set app theme to blue-grey
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const HomePage(), // Set HomePage as the initial screen
     );
   }
 }
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: ElevatedButton(
               onPressed: () {
+                // Navigate to QRCodeWidget when "Scan Now" button is pressed
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -73,17 +75,15 @@ class QRCodeWidget extends StatefulWidget {
   State<QRCodeWidget> createState() => _QRCodeWidgetState();
 }
 
-// ... (your existing imports)
-
 class _QRCodeWidgetState extends State<QRCodeWidget> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  late QRViewController controller;
-  String result = '';
-  bool isFlashOn = false;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR'); // Key for QRView widget
+  late QRViewController controller; // Controller for QR code scanning
+  String result = ''; // Store scanned QR code result
+  bool isFlashOn = false; // Track flashlight status
 
   @override
   void dispose() {
-    controller.dispose();
+    controller.dispose(); // Dispose the QRViewController to release resources
     super.dispose();
   }
 
@@ -102,14 +102,15 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                 QRView(
                   key: qrKey,
                   onQRViewCreated: (controller) {
+                    // Initialize QRViewController and handle scan events
                     setState(() {
                       this.controller = controller;
                     });
                     controller.scannedDataStream.listen((scandata) {
                       setState(() {
-                        result = scandata.code!;
+                        result = scandata.code!; // Store scanned QR code result
                         if (result.isNotEmpty) {
-                          // If result is not empty, close the camera
+                          // Pause camera when a QR code is successfully scanned
                           controller.pauseCamera();
                         }
                       });
@@ -152,6 +153,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        // Copy scanned URL to clipboard
                         Clipboard.setData(ClipboardData(text: result));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -171,8 +173,9 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                     const SizedBox(width: 180),
                     ElevatedButton(
                       onPressed: () {
+                        // Open scanned URL in default browser
                         final Uri url = Uri.parse(result);
-                        launchUrl(url);
+                        launch(url.toString());
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
@@ -188,7 +191,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                 const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {
-                    // Clear the result and resume the camera
+                    // Clear result and resume camera for scanning again
                     setState(() {
                       result = '';
                     });
@@ -214,7 +217,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      // Toggle the flash
+                      // Toggle flashlight on/off
                       setState(() {
                         isFlashOn = !isFlashOn;
                       });
